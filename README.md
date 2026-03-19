@@ -11,14 +11,21 @@ Our solution aims to provide AI-powered parametric insurance that automatically 
 **Target Persona:**
 
 Food Delivery Workers (Swiggy / Zomato)
+
 Characteristics:	
+
 Work outdoors for long hours
+
 Earnings depend on number of deliveries
+
 Highly affected by environmental disruptions
+
 Example scenario:
 A Swiggy delivery partner in Chennai cannot work due to heavy rain or floods, causing income loss for that day or week.
 GigShield AI automatically detects this disruption and provides instant income protection payout.
-Proposed Solution:
+
+
+**Proposed Solution:**
 GigShield AI is an AI-enabled parametric insurance platform that protects gig workers from income loss caused by environmental disruptions.
 Key capabilities:
 AI-based risk profiling
