@@ -78,50 +78,68 @@ Movement restriction
 **AI/ML Integration**
 
 1. Risk Profiling
-Predicts disruption probability
+Predicts disruption probability,
 Calculates premium dynamically
+
 2. Fraud Detection
-Detects fake claims
+Detects fake claims,
 Validates location and activity
+
 3. Income Loss Estimation
-Estimates expected vs actual earnings
+Estimates expected vs actual earnings,
 Ensures fair payout calculation
 
 **Tech Stack**
 
 Frontend: React.js + Tailwind CSS
+
 Backend: FastAPI
+
 AI Engine: Risk + Fraud models
+
 Database: PostgreSQL
+
 APIs: Weather, AQI, Maps
+
 Payment: Razorpay / Wallet
-Tech Stack
 
 **Core Features**
 
 AI-based risk profiling
+
 Weekly premium model
+
 Parametric trigger system
+
 Automated payout system
+
 Fraud detection
+
 Real-time disruption monitoring
 
 **Advanced Features**
 
 1) Dynamic Premium Pricing:
  Premium changes based on real-time risk
+
 2) Delivery Activity-Based Trigger:
  Detects income loss using drop in orders
+
 3) Risk Heatmap Dashboard:
  Shows high-risk zones visually
+
 4) Disruption Prediction (AI):
  Predicts events before they occur
+
 5) Worker Reputation Score:
  Rewards trusted users with lower premiums
 
 **Expected Impact**
 
 Protects gig workers’ income
+
 Enables fast, automatic payouts
+
 Reduces fraud using AI
+
 Builds a scalable insurance solution
