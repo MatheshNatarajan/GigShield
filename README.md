@@ -1,9 +1,9 @@
-<h1 align="center">🚀 GigShield AI</h1>
+<h1 align="center">GigShield AI</h1>
 <h3 align="center">Parametric Income Protection for Gig Workers</h3>
 
 <hr>
 
-<h2>📌 Problem Statement</h2>
+<h2>Problem Statement</h2>
 <p>
 India’s gig economy delivery workers (Zomato, Swiggy, Amazon, Zepto, etc.) depend on daily and weekly earnings. External disruptions such as extreme weather, pollution, floods, and sudden curfews significantly affect their ability to work, causing them to lose 20–30% of their income.
 </p>
@@ -16,7 +16,7 @@ Our solution aims to provide AI-powered parametric insurance that automatically 
 
 <hr>
 
-<h2>🎯 Target Persona</h2>
+<h2>Target Persona</h2>
 <h3>Food Delivery Workers (Swiggy / Zomato)</h3>
 <ul>
   <li>Work outdoors for long hours</li>
@@ -32,7 +32,7 @@ GigShield AI automatically detects this disruption and provides instant payout.
 
 <hr>
 
-<h2>💡 Proposed Solution</h2>
+<h2>Proposed Solution</h2>
 <p>
 GigShield AI is an AI-enabled parametric insurance platform that protects gig workers from income loss caused by environmental disruptions.
 </p>
@@ -49,7 +49,7 @@ GigShield AI is an AI-enabled parametric insurance platform that protects gig wo
 
 <hr>
 
-<h2>💰 Weekly Premium Model</h2>
+<h2>Weekly Premium Model</h2>
 <p>Premium is calculated weekly based on income.</p>
 
 <table border="1" cellpadding="8">
@@ -65,7 +65,7 @@ GigShield AI is an AI-enabled parametric insurance platform that protects gig wo
 
 <hr>
 
-<h2>⚡ Parametric Triggers</h2>
+<h2>Parametric Triggers</h2>
 <p>
 The system detects disruptions automatically using external data such as weather, pollution, and alerts.
 </p>
@@ -84,7 +84,7 @@ The system compares expected earnings vs actual earnings to calculate income los
 
 <hr>
 
-<h2>🤖 AI Integration</h2>
+<h2>AI Integration</h2>
 
 <h3>AI-Based Risk Profiling</h3>
 <ul>
@@ -110,7 +110,7 @@ The system compares expected earnings vs actual earnings to calculate income los
 
 <hr>
 
-<h2>⚙️ System Workflow</h2>
+<h2>System Workflow</h2>
 
 <ol>
 <li><b>Registration:</b> Worker registers with details and location.</li>
@@ -125,14 +125,14 @@ The system compares expected earnings vs actual earnings to calculate income los
 
 <hr>
 
-<h2>🏗️ System Architecture</h2>
+<h2>System Architecture</h2>
 <p>
 Frontend → Backend → AI Engine → Database → External APIs → Payment System
 </p>
 
 <hr>
 
-<h2>🧰 Tech Stack</h2>
+<h2>Tech Stack</h2>
 
 <table border="1" cellpadding="8">
 <tr>
@@ -175,7 +175,7 @@ Frontend → Backend → AI Engine → Database → External APIs → Payment Sy
 
 <hr>
 
-<h2>🌟 Key Features</h2>
+<h2>Key Features</h2>
 <ul>
   <li>AI-based risk profiling</li>
   <li>Weekly pricing model</li>
@@ -187,7 +187,7 @@ Frontend → Backend → AI Engine → Database → External APIs → Payment Sy
 
 <hr>
 
-<h2>📊 Analytics Dashboard</h2>
+<h2>Analytics Dashboard</h2>
 <ul>
   <li>Active policies</li>
   <li>Disruption events</li>
@@ -197,7 +197,7 @@ Frontend → Backend → AI Engine → Database → External APIs → Payment Sy
 
 <hr>
 
-<h2>🚀 Future Enhancements</h2>
+<h2>Future Enhancements</h2>
 <ul>
   <li>Platform API integration</li>
   <li>Mobile app</li>
@@ -207,7 +207,7 @@ Frontend → Backend → AI Engine → Database → External APIs → Payment Sy
 
 <hr>
 
-<h2>🛠️ Development Plan</h2>
+<h2>Development Plan</h2>
 <ul>
   <li><b>Phase 1:</b> Ideation & design</li>
   <li><b>Phase 2:</b> Backend + AI</li>
@@ -216,7 +216,7 @@ Frontend → Backend → AI Engine → Database → External APIs → Payment Sy
 
 <hr>
 
-<h2>🌍 Expected Impact</h2>
+<h2>Expected Impact</h2>
 <ul>
   <li>Income protection for gig workers</li>
   <li>Fast automated payouts</li>
