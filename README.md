@@ -226,4 +226,4 @@ Frontend → Backend → AI Engine → Database → External APIs → Payment Sy
 
 <hr>
 
-<h3 align="center">✨ GigShield AI – Empowering Gig Workers</h3>
+<h3 align="center">GigShield AI – Empowering Gig Workers</h3>
