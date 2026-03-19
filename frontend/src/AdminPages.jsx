@@ -4,13 +4,13 @@ const registeredWorkers = [
   { id: 'GW-001', name: 'Kumar R.', platform: 'Swiggy', phone: '+91 98765 43210', zone: 'Coimbatore', aadhaar: 'XXXX-XXXX-4512', pan: 'ABCDE1234F', dl: 'TN38-20210045123', vehicle: 'TN38-BX-4419', bank: 'SBI XXXX4821', upi: 'kumar.r@oksbi', plan: 'Max Elite', status: 'Active', joined: 'Oct 01, 2026' },
   { id: 'GW-002', name: 'Ravi K.', platform: 'Zomato', phone: '+91 87654 32109', zone: 'Bangalore Core', aadhaar: 'XXXX-XXXX-8821', pan: 'FGHIJ5678K', dl: 'KA05-20190088412', vehicle: 'KA05-MN-7712', bank: 'HDFC XXXX3301', upi: 'ravikumar@okhdfc', plan: 'Standard Pro', status: 'Active', joined: 'Sep 28, 2026' },
   { id: 'GW-003', name: 'Priya S.', platform: 'Swiggy', phone: '+91 76543 21098', zone: 'Chennai Central', aadhaar: 'XXXX-XXXX-3301', pan: 'KLMNO9012P', dl: 'TN09-20220011987', vehicle: 'TN09-CD-8890', bank: 'ICICI XXXX2241', upi: 'priya.s@okicici', plan: 'Basic Shield', status: 'Suspended', joined: 'Sep 15, 2026' },
-  { id: 'GW-004', name: 'Arjun M.', platform: 'Dunzo', phone: '+91 65432 10987', zone: 'Coimbatore', aadhaar: 'XXXX-XXXX-6677', pan: 'QRSTU3456V', dl: 'TN38-20180067234', vehicle: 'TN38-GH-2290', bank: 'Axis XXXX9987', upi: 'arjun.m@axisbank', plan: 'Standard Pro', status: 'Active', joined: 'Oct 10, 2026' },
+  { id: 'GW-004', name: 'Arjun M.', platform: 'Swiggy', phone: '+91 65432 10987', zone: 'Coimbatore', aadhaar: 'XXXX-XXXX-6677', pan: 'QRSTU3456V', dl: 'TN38-20180067234', vehicle: 'TN38-GH-2290', bank: 'Axis XXXX9987', upi: 'arjun.m@axisbank', plan: 'Standard Pro', status: 'Active', joined: 'Oct 10, 2026' },
   { id: 'GW-005', name: 'Sneha R.', platform: 'Zomato', phone: '+91 54321 09876', zone: 'Hyderabad West', aadhaar: 'XXXX-XXXX-2290', pan: 'VWXYZ7890A', dl: 'TS08-20230099001', vehicle: 'TS08-PQ-6612', bank: 'SBI XXXX1120', upi: 'sneha.r@oksbi', plan: 'Max Elite', status: 'Active', joined: 'Oct 14, 2026' },
 ];
 
 const liveWorkers = [
   { id: 'GW-001', name: 'Kumar R.', zone: 'Neelambur, Coimbatore', platform: 'Swiggy', orders: 8, status: 'Delivering', risk: 'Low', earnings: '₹640' },
-  { id: 'GW-004', name: 'Arjun M.', zone: 'RS Puram, Coimbatore', platform: 'Dunzo', orders: 4, status: 'Idle', risk: 'Medium', earnings: '₹320' },
+  { id: 'GW-004', name: 'Arjun M.', zone: 'RS Puram, Coimbatore', platform: 'Swiggy', orders: 4, status: 'Idle', risk: 'Medium', earnings: '₹320' },
   { id: 'GW-002', name: 'Ravi K.', zone: 'Koramangala, Bangalore', platform: 'Zomato', orders: 12, status: 'Delivering', risk: 'High', earnings: '₹960' },
   { id: 'GW-005', name: 'Sneha R.', zone: 'Banjara Hills, Hyderabad', platform: 'Zomato', orders: 6, status: 'Delivering', risk: 'Low', earnings: '₹480' },
 ];

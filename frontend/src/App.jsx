@@ -37,13 +37,13 @@ const registeredWorkers = [
   { id: 'GW-001', name: 'Mathesh N.', platform: 'Swiggy', phone: '+91 98765 43210', zone: 'Coimbatore', aadhaar: 'XXXX-XXXX-4512', pan: 'ABCDE1234F', dl: 'TN38-20210045123', plan: 'Max Elite', status: 'Active', joined: 'Oct 01, 2026' },
   { id: 'GW-002', name: 'Ravi K.', platform: 'Zomato', phone: '+91 87654 32109', zone: 'Bangalore Core', aadhaar: 'XXXX-XXXX-8821', pan: 'FGHIJ5678K', dl: 'KA05-20190088412', plan: 'Standard Pro', status: 'Active', joined: 'Sep 28, 2026' },
   { id: 'GW-003', name: 'Priya S.', platform: 'Swiggy', phone: '+91 76543 21098', zone: 'Chennai Central', aadhaar: 'XXXX-XXXX-3301', pan: 'KLMNO9012P', dl: 'TN09-20220011987', plan: 'Basic Shield', status: 'Suspended', joined: 'Sep 15, 2026' },
-  { id: 'GW-004', name: 'Arjun M.', platform: 'Dunzo', phone: '+91 65432 10987', zone: 'Coimbatore', aadhaar: 'XXXX-XXXX-6677', pan: 'QRSTU3456V', dl: 'TN38-20180067234', plan: 'Standard Pro', status: 'Active', joined: 'Oct 10, 2026' },
+  { id: 'GW-004', name: 'Arjun M.', platform: 'Swiggy', phone: '+91 65432 10987', zone: 'Coimbatore', aadhaar: 'XXXX-XXXX-6677', pan: 'QRSTU3456V', dl: 'TN38-20180067234', plan: 'Standard Pro', status: 'Active', joined: 'Oct 10, 2026' },
   { id: 'GW-005', name: 'Sneha R.', platform: 'Zomato', phone: '+91 54321 09876', zone: 'Hyderabad West', aadhaar: 'XXXX-XXXX-2290', pan: 'VWXYZ7890A', dl: 'TS08-20230099001', plan: 'Max Elite', status: 'Active', joined: 'Oct 14, 2026' },
 ];
 
 const liveWorkers = [
   { id: 'GW-001', name: 'Mathesh N.', zone: 'Neelambur, Coimbatore', platform: 'Swiggy', orders: 8, status: 'Delivering', risk: 'Low', earnings: '₹640' },
-  { id: 'GW-004', name: 'Arjun M.', zone: 'RS Puram, Coimbatore', platform: 'Dunzo', orders: 4, status: 'Idle', risk: 'Medium', earnings: '₹320' },
+  { id: 'GW-004', name: 'Arjun M.', zone: 'RS Puram, Coimbatore', platform: 'Swiggy', orders: 4, status: 'Idle', risk: 'Medium', earnings: '₹320' },
   { id: 'GW-002', name: 'Ravi K.', zone: 'Koramangala, Bangalore', platform: 'Zomato', orders: 12, status: 'Delivering', risk: 'High', earnings: '₹960' },
   { id: 'GW-005', name: 'Sneha R.', zone: 'Banjara Hills, Hyderabad', platform: 'Zomato', orders: 6, status: 'Delivering', risk: 'Low', earnings: '₹480' },
 ];
@@ -183,6 +183,7 @@ export default function App() {
 // --- COMPONENTS ---
 function LoginScreen({ onLogin }) {
   const [authMode, setAuthMode] = React.useState('roleSelect'); // 'roleSelect', 'workerLogin', 'adminLogin', 'register'
+  const [selectedPlatform, setSelectedPlatform] = React.useState(''); // 'swiggy', 'zomato'
   
   // Hackathon Demo States
   const [loginId, setLoginId] = React.useState('');
@@ -369,15 +370,36 @@ function LoginScreen({ onLogin }) {
           <div style={{ background: 'var(--bg-base)', padding: '2rem', borderRadius: '16px', border: '1px solid var(--border-highlight)' }}>
             <label style={{ display: 'block', marginBottom: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', fontSize: '1.1rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '0.5rem' }}>1. Platform Verification</label>
             <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: '1.5rem' }}>
-              <label style={{ padding: '1.5rem 1rem', border: '2px solid rgba(252, 128, 25, 0.2)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', cursor: 'pointer', background: 'rgba(252, 128, 25, 0.05)', transition: 'all 0.2s', textAlign: 'center' }}>
-                <input type="radio" name="platform" value="swiggy" required />
+              <label style={{ padding: '1.5rem 1rem', border: selectedPlatform === 'swiggy' ? '2px solid #fc8019' : '2px solid rgba(252, 128, 25, 0.2)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', cursor: 'pointer', background: selectedPlatform === 'swiggy' ? 'rgba(252, 128, 25, 0.1)' : 'rgba(252, 128, 25, 0.05)', transition: 'all 0.2s', textAlign: 'center' }}>
+                <input type="radio" name="platform" value="swiggy" required onChange={() => setSelectedPlatform('swiggy')} />
                 <span style={{ fontWeight: 800, fontSize: '1.15rem', color: '#fc8019', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>🍔 Connect Swiggy</span>
               </label>
-              <label style={{ padding: '1.5rem 1rem', border: '2px solid rgba(226, 55, 68, 0.2)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', cursor: 'pointer', background: 'rgba(226, 55, 68, 0.05)', transition: 'all 0.2s', textAlign: 'center' }}>
-                <input type="radio" name="platform" value="zomato" required />
+              <label style={{ padding: '1.5rem 1rem', border: selectedPlatform === 'zomato' ? '2px solid #E23744' : '2px solid rgba(226, 55, 68, 0.2)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', cursor: 'pointer', background: selectedPlatform === 'zomato' ? 'rgba(226, 55, 68, 0.1)' : 'rgba(226, 55, 68, 0.05)', transition: 'all 0.2s', textAlign: 'center' }}>
+                <input type="radio" name="platform" value="zomato" required onChange={() => setSelectedPlatform('zomato')} />
                 <span style={{ fontWeight: 800, fontSize: '1.15rem', color: '#E23744', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>🛵 Connect Zomato</span>
               </label>
             </div>
+            
+            {/* Dynamic Platform ID Input */}
+            {selectedPlatform && (
+              <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'var(--bg-surface)', borderRadius: '8px', border: '1px solid var(--border-highlight)', animation: 'slideIn 0.3s ease-out' }}>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 700, color: 'var(--text-secondary)' }}>
+                  Enter your {selectedPlatform === 'swiggy' ? 'Swiggy' : 'Zomato'} Partner ID
+                </label>
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  <input 
+                    type="text" 
+                    placeholder={selectedPlatform === 'swiggy' ? "e.g. SWIG-12345" : "e.g. ZOM-98765"} 
+                    required 
+                    style={{ flex: 1, padding: '0.85rem', borderRadius: '8px', border: '1px solid var(--border-highlight)', background: 'var(--bg-base)' }} 
+                  />
+                  <button type="button" style={{ padding: '0 1.5rem', background: selectedPlatform === 'swiggy' ? '#fc8019' : '#E23744', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer' }}>
+                    Verify ID
+                  </button>
+                </div>
+              </div>
+            )}
+            
             <p style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', marginTop: '1rem', textAlign: 'center' }}><ShieldCheck size={16} style={{ display: 'inline', verticalAlign: 'middle' }}/> Synced securely via Account Aggregator</p>
           </div>
 
