@@ -4,6 +4,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import './index.css';
+import { AdminRegisteredWorkers, AdminLiveWorkers } from './AdminPages';
 
 // --- MOCK DATA ---
 const payoutData = [
@@ -32,6 +33,21 @@ const workerClaims = [
   { id: 'CLM-001', event: 'AQI Severe', date: 'Sep 30, 2026', expected: '₹600', actual: '₹500', payout: '₹0', status: 'Rejected' }
 ];
 
+const registeredWorkers = [
+  { id: 'GW-001', name: 'Mathesh N.', platform: 'Swiggy', phone: '+91 98765 43210', zone: 'Coimbatore', aadhaar: 'XXXX-XXXX-4512', pan: 'ABCDE1234F', dl: 'TN38-20210045123', plan: 'Max Elite', status: 'Active', joined: 'Oct 01, 2026' },
+  { id: 'GW-002', name: 'Ravi K.', platform: 'Zomato', phone: '+91 87654 32109', zone: 'Bangalore Core', aadhaar: 'XXXX-XXXX-8821', pan: 'FGHIJ5678K', dl: 'KA05-20190088412', plan: 'Standard Pro', status: 'Active', joined: 'Sep 28, 2026' },
+  { id: 'GW-003', name: 'Priya S.', platform: 'Swiggy', phone: '+91 76543 21098', zone: 'Chennai Central', aadhaar: 'XXXX-XXXX-3301', pan: 'KLMNO9012P', dl: 'TN09-20220011987', plan: 'Basic Shield', status: 'Suspended', joined: 'Sep 15, 2026' },
+  { id: 'GW-004', name: 'Arjun M.', platform: 'Dunzo', phone: '+91 65432 10987', zone: 'Coimbatore', aadhaar: 'XXXX-XXXX-6677', pan: 'QRSTU3456V', dl: 'TN38-20180067234', plan: 'Standard Pro', status: 'Active', joined: 'Oct 10, 2026' },
+  { id: 'GW-005', name: 'Sneha R.', platform: 'Zomato', phone: '+91 54321 09876', zone: 'Hyderabad West', aadhaar: 'XXXX-XXXX-2290', pan: 'VWXYZ7890A', dl: 'TS08-20230099001', plan: 'Max Elite', status: 'Active', joined: 'Oct 14, 2026' },
+];
+
+const liveWorkers = [
+  { id: 'GW-001', name: 'Mathesh N.', zone: 'Neelambur, Coimbatore', platform: 'Swiggy', orders: 8, status: 'Delivering', risk: 'Low', earnings: '₹640' },
+  { id: 'GW-004', name: 'Arjun M.', zone: 'RS Puram, Coimbatore', platform: 'Dunzo', orders: 4, status: 'Idle', risk: 'Medium', earnings: '₹320' },
+  { id: 'GW-002', name: 'Ravi K.', zone: 'Koramangala, Bangalore', platform: 'Zomato', orders: 12, status: 'Delivering', risk: 'High', earnings: '₹960' },
+  { id: 'GW-005', name: 'Sneha R.', zone: 'Banjara Hills, Hyderabad', platform: 'Zomato', orders: 6, status: 'Delivering', risk: 'Low', earnings: '₹480' },
+];
+
 export default function App() {
   const [userRole, setUserRole] = useState(null); // 'admin' | 'worker' | null
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -55,6 +71,8 @@ export default function App() {
     dashboard: "Admin Analytics Overview",
     risk: "Real-Time Risk Map",
     alerts: "Fraud & Alerts Monitoring",
+    workers: "Registered Gig Workers",
+    live: "Live Workers Monitor",
     profile: "Gig Worker Profile",
     benefits: "Policy Rules & Benefits",
     policies: "My Parametric Policies",
@@ -66,6 +84,8 @@ export default function App() {
     dashboard: "Real-time parametric insurance triggers & ecosystem health.",
     risk: "Geographic zones dynamically highlighted by API inputs.",
     alerts: "Live Anti-Spoofing system flags and threshold triggers.",
+    workers: "Full KYC records and document details for all enrolled gig workers.",
+    live: "Real-time view of workers currently active on partner platforms.",
     profile: "Manage your income stability score and active quote status.",
     benefits: "Understand exactly how much you get paid when disaster strikes.",
     policies: "Review your currently active and historical policies.",
@@ -93,6 +113,12 @@ export default function App() {
               </div>
               <div className={`nav-item ${activeTab === 'alerts' ? 'active' : ''}`} onClick={() => setActiveTab('alerts')}>
                 <Bell size={20} /> Fraud Alerts
+              </div>
+              <div className={`nav-item ${activeTab === 'workers' ? 'active' : ''}`} onClick={() => setActiveTab('workers')}>
+                <Users size={20} /> Registered Workers
+              </div>
+              <div className={`nav-item ${activeTab === 'live' ? 'active' : ''}`} onClick={() => setActiveTab('live')}>
+                <Activity size={20} /> Live Workers
               </div>
             </>
           ) : (
@@ -137,6 +163,8 @@ export default function App() {
             {activeTab === 'dashboard' && <AdminDashboardView />}
             {activeTab === 'risk' && <AdminRiskMap />}
             {activeTab === 'alerts' && <AdminFraudAlerts />}
+            {activeTab === 'workers' && <AdminRegisteredWorkers />}
+            {activeTab === 'live' && <AdminLiveWorkers />}
           </>
         ) : (
           <>
@@ -372,26 +400,30 @@ function LoginScreen({ onLogin }) {
               <label style={{ display: 'block', marginBottom: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', fontSize: '1.1rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '0.5rem' }}>2. Identity & KYC Documents</label>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                 <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Aadhar Card Number</label>
-                  <input type="text" placeholder="XXXX XXXX XXXX" required style={{ width: '100%', padding: '0.85rem', borderRadius: '8px', border: '1px solid var(--border-highlight)', background: 'var(--bg-surface)' }} />
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Aadhaar Card Number</label>
+                  <input type="text" placeholder="XXXX-XXXX-XXXX" required style={{ width: '100%', padding: '0.85rem', borderRadius: '8px', border: '1px solid var(--border-highlight)', background: 'var(--bg-surface)' }} />
                 </div>
                 <div>
                   <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>PAN Card Number</label>
                   <input type="text" placeholder="ABCDE1234F" required style={{ textTransform: 'uppercase', width: '100%', padding: '0.85rem', borderRadius: '8px', border: '1px solid var(--border-highlight)', background: 'var(--bg-surface)' }} />
                 </div>
-                
                 <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Upload Aadhar Photo</label>
-                  <div style={{ display: 'flex', alignItems: 'center', background: 'var(--bg-surface)', border: '1px dashed var(--border-highlight)', borderRadius: '8px', padding: '0.5rem' }}>
-                    <FileText size={20} color="var(--text-muted)" style={{ margin: '0 0.5rem' }} />
-                    <input type="file" required accept="image/*,.pdf" style={{ width: '100%', color: 'var(--text-secondary)', fontSize: '0.9rem' }} />
-                  </div>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Driving Licence Number</label>
+                  <input type="text" placeholder="TNXX-YYYYXXXXXXX" required style={{ textTransform: 'uppercase', width: '100%', padding: '0.85rem', borderRadius: '8px', border: '1px solid var(--border-highlight)', background: 'var(--bg-surface)' }} />
                 </div>
                 <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Past Week Income Proof</label>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Vehicle Registration (RC)</label>
+                  <input type="text" placeholder="TNXX-XX-XXXX" required style={{ textTransform: 'uppercase', width: '100%', padding: '0.85rem', borderRadius: '8px', border: '1px solid var(--border-highlight)', background: 'var(--bg-surface)' }} />
+                </div>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Bank Account (UPI ID)</label>
+                  <input type="text" placeholder="worker@okhdfc" required style={{ width: '100%', padding: '0.85rem', borderRadius: '8px', border: '1px solid var(--border-highlight)', background: 'var(--bg-surface)' }} />
+                </div>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Live Selfie (Profile Photo)</label>
                   <div style={{ display: 'flex', alignItems: 'center', background: 'var(--bg-surface)', border: '1px dashed var(--border-highlight)', borderRadius: '8px', padding: '0.5rem' }}>
                     <FileText size={20} color="var(--text-muted)" style={{ margin: '0 0.5rem' }} />
-                    <input type="file" required accept="image/*,.pdf" style={{ width: '100%', color: 'var(--text-secondary)', fontSize: '0.9rem' }} />
+                    <input type="file" required accept="image/*" style={{ width: '100%', color: 'var(--text-secondary)', fontSize: '0.9rem' }} />
                   </div>
                 </div>
               </div>
