@@ -132,7 +132,7 @@ The system compares expected earnings vs actual earnings to calculate income los
 <h2>System Architecture</h2>
 
 <p align="center">
-  <img src="architecture.jpeg" width="700">
+  <img src="architechture.jpeg" width="700">
 </p>
 
 <p>
