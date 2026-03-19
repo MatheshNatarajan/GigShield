@@ -112,6 +112,10 @@ The system compares expected earnings vs actual earnings to calculate income los
 
 <h2>System Workflow</h2>
 
+<p align="center">
+  <img src="workflow.jpeg" width="700">
+</p>
+
 <ol>
 <li><b>Registration:</b> Worker registers with details and location.</li>
 <li><b>Risk Analysis:</b> AI calculates risk score.</li>
@@ -126,6 +130,11 @@ The system compares expected earnings vs actual earnings to calculate income los
 <hr>
 
 <h2>System Architecture</h2>
+
+<p align="center">
+  <img src="architecture.jpeg" width="700">
+</p>
+
 <p>
 Frontend → Backend → AI Engine → Database → External APIs → Payment System
 </p>
