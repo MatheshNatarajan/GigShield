@@ -109,7 +109,7 @@ The system compares expected earnings vs actual earnings to calculate income los
 </ul>
 
 <hr>
-
+<h2>Adversarial Defense & Anti-Spoofing Strategy<h3>
 <h2>🛡️ Zero-Trust Adaptive Fraud Defense System</h2>
 
 <p>
