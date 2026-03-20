@@ -110,6 +110,99 @@ The system compares expected earnings vs actual earnings to calculate income los
 
 <hr>
 
+<h2>🛡️ Zero-Trust Adaptive Fraud Defense System</h2>
+
+<p>
+This system is designed to handle high-risk <b>Market Crash scenarios</b> involving coordinated fraud attacks such as fake GPS, bot claims, and payout exploitation.
+</p>
+
+<p>
+GigShield AI uses a <b>multi-layer zero-trust architecture</b> where every claim is treated as suspicious until validated using intelligent checks.
+</p>
+
+<hr>
+
+<h3>🔹 Layer 1 — Geo-Spatial Authenticity</h3>
+<ul>
+  <li>GPS + IP + device fingerprint verification</li>
+  <li>Detects fake GPS and abnormal movement</li>
+  <li>Matches worker with disruption zone</li>
+</ul>
+
+<hr>
+
+<h3>🔹 Layer 2 — Economic Activity Verification</h3>
+<ul>
+  <li>Checks delivery activity before and during disruption</li>
+  <li>Measures drop in orders and earnings</li>
+</ul>
+
+<pre>
+If (Orders drop > 40%) AND (Disruption exists)
+→ Eligible
+</pre>
+
+<hr>
+
+<h3>🔹 Layer 3 — Temporal Consistency Engine</h3>
+<ul>
+  <li>Detects bulk claim spikes</li>
+  <li>Identifies synchronized claims</li>
+</ul>
+
+<hr>
+
+<h3>🔹 Layer 4 — Behavioral AI Engine</h3>
+<ul>
+  <li>Isolation Forest / anomaly detection</li>
+  <li>Detects fraud clusters</li>
+</ul>
+
+<hr>
+
+<h3>🔹 Layer 5 — Trust Score System</h3>
+
+<table border="1" cellpadding="8">
+<tr>
+<th>Score</th>
+<th>Action</th>
+</tr>
+<tr>
+<td>80+</td>
+<td>Instant payout</td>
+</tr>
+<tr>
+<td>50–80</td>
+<td>Standard checks</td>
+</tr>
+<tr>
+<td><50</td>
+<td>Strict validation</td>
+</tr>
+</table>
+
+<hr>
+
+<h3>🔄 Fraud Detection Workflow</h3>
+
+<pre>
+Claim Triggered
+↓
+Location Check
+↓
+Activity Validation
+↓
+Time Pattern Check
+↓
+AI Detection
+↓
+Trust Score
+↓
+Approve / Flag / Reject
+</pre>
+
+<hr>
+
 <h2>System Workflow</h2>
 
 <p align="center">
@@ -117,14 +210,14 @@ The system compares expected earnings vs actual earnings to calculate income los
 </p>
 
 <ol>
-<li><b>Registration:</b> Worker registers with details and location.</li>
-<li><b>Risk Analysis:</b> AI calculates risk score.</li>
-<li><b>Premium Calculation:</b> Weekly premium is generated.</li>
-<li><b>Policy Purchase:</b> Worker activates policy.</li>
-<li><b>Monitoring:</b> System tracks real-time disruptions.</li>
-<li><b>Trigger Detection:</b> Event detected automatically.</li>
-<li><b>Validation:</b> Fraud and eligibility check.</li>
-<li><b>Payout:</b> Compensation credited instantly.</li>
+<li>Registration</li>
+<li>Risk Analysis</li>
+<li>Premium Calculation</li>
+<li>Policy Activation</li>
+<li>Monitoring</li>
+<li>Trigger Detection</li>
+<li>Validation</li>
+<li>Payout</li>
 </ol>
 
 <hr>
@@ -144,84 +237,15 @@ Frontend → Backend → AI Engine → Database → External APIs → Payment Sy
 <h2>Tech Stack</h2>
 
 <table border="1" cellpadding="8">
-<tr>
-<th>Technology</th>
-<th>Purpose</th>
-</tr>
-<tr>
-<td>React.js + Tailwind CSS</td>
-<td>Frontend UI</td>
-</tr>
-<tr>
-<td>FastAPI</td>
-<td>Backend API</td>
-</tr>
-<tr>
-<td>Scikit-learn</td>
-<td>AI models</td>
-</tr>
-<tr>
-<td>PostgreSQL / MongoDB</td>
-<td>Database</td>
-</tr>
-<tr>
-<td>OpenWeather API</td>
-<td>Weather data</td>
-</tr>
-<tr>
-<td>AQI API</td>
-<td>Pollution data</td>
-</tr>
-<tr>
-<td>Google Maps API</td>
-<td>Location tracking</td>
-</tr>
-<tr>
-<td>Razorpay</td>
-<td>Payout processing</td>
-</tr>
+<tr><th>Technology</th><th>Purpose</th></tr>
+<tr><td>React.js</td><td>Frontend</td></tr>
+<tr><td>FastAPI</td><td>Backend</td></tr>
+<tr><td>Scikit-learn</td><td>AI Models</td></tr>
+<tr><td>PostgreSQL</td><td>Database</td></tr>
+<tr><td>OpenWeather API</td><td>Weather Data</td></tr>
+<tr><td>Google Maps API</td><td>Location</td></tr>
+<tr><td>Razorpay</td><td>Payout</td></tr>
 </table>
-
-<hr>
-
-<h2>Key Features</h2>
-<ul>
-  <li>AI-based risk profiling</li>
-  <li>Weekly pricing model</li>
-  <li>Parametric triggers</li>
-  <li>Automated payouts</li>
-  <li>Fraud detection</li>
-  <li>Real-time monitoring</li>
-</ul>
-
-<hr>
-
-<h2>Analytics Dashboard</h2>
-<ul>
-  <li>Active policies</li>
-  <li>Disruption events</li>
-  <li>Payout tracking</li>
-  <li>Risk zones</li>
-</ul>
-
-<hr>
-
-<h2>Future Enhancements</h2>
-<ul>
-  <li>Platform API integration</li>
-  <li>Mobile app</li>
-  <li>Advanced risk prediction</li>
-  <li>Blockchain verification</li>
-</ul>
-
-<hr>
-
-<h2>Development Plan</h2>
-<ul>
-  <li><b>Phase 1:</b> Ideation & design</li>
-  <li><b>Phase 2:</b> Backend + AI</li>
-  <li><b>Phase 3:</b> UI + dashboard</li>
-</ul>
 
 <hr>
 
@@ -229,10 +253,10 @@ Frontend → Backend → AI Engine → Database → External APIs → Payment Sy
 <ul>
   <li>Income protection for gig workers</li>
   <li>Fast automated payouts</li>
-  <li>Reduced fraud</li>
-  <li>Affordable insurance model</li>
+  <li>Fraud-resistant system</li>
+  <li>Scalable insurance model</li>
 </ul>
 
 <hr>
 
-<h3 align="center">GigShield AI – Empowering Gig Workers</h3>
+<h3 align="center">GigShield AI – Empowering Gig Workers 🚀</h3>
