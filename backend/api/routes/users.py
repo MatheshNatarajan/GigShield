@@ -21,28 +21,15 @@ def get_db():
 
 @router.post("/register", response_model=UserResponse)
 def register_user(user: UserCreate, db: Session = Depends(get_db)):
-    # Check if user already exists
-    existing_user = db.query(User).filter(User.phone == user.phone).first()
-    if existing_user:
-        return existing_user
-
     db_user = User(
         name=user.name, 
-        phone=user.phone,
-        city=user.city,
         gig_platform=user.gig_platform,
-        weekly_income=user.weekly_income
+        base_location_lat=user.base_location_lat,
+        base_location_lon=user.base_location_lon
     )
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
-    return db_user
-
-@router.get("/phone/{phone}", response_model=UserResponse)
-def get_user_by_phone(phone: str, db: Session = Depends(get_db)):
-    db_user = db.query(User).filter(User.phone == phone).first()
-    if not db_user:
-        raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
 @router.get("/{user_id}", response_model=UserResponse)
