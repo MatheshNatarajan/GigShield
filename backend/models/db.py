@@ -14,9 +14,12 @@ class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
+    phone = Column(String, index=True)
+    city = Column(String) # Chennai, Bangalore, etc.
     gig_platform = Column(String) # Swiggy, Zomato
-    base_location_lat = Column(Float)
-    base_location_lon = Column(Float)
+    weekly_income = Column(Float, default=7000.0)
+    base_location_lat = Column(Float, nullable=True)
+    base_location_lon = Column(Float, nullable=True)
     trust_score = Column(Float, default=85.0)
     income_stability_score = Column(Float, default=70.0)
     
@@ -34,10 +37,11 @@ class Policy(Base):
     __tablename__ = "policies"
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
-    zone_id = Column(Integer, ForeignKey("zones.id"))
+    zone_id = Column(Integer, ForeignKey("zones.id"), nullable=True)
     start_date = Column(DateTime, default=datetime.utcnow)
     end_date = Column(DateTime)
     weekly_premium = Column(Float)
+    coverage_amount = Column(Float)
     active_status = Column(Boolean, default=True)
     
     user = relationship("User", back_populates="policies")
@@ -58,12 +62,15 @@ class Claim(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     policy_id = Column(Integer, ForeignKey("policies.id"))
-    disruption_id = Column(Integer, ForeignKey("disruptions.id"))
+    disruption_id = Column(Integer, ForeignKey("disruptions.id"), nullable=True)
+    trigger_type = Column(String) # Rain, Heat, etc.
+    event_timestamp = Column(DateTime, default=datetime.utcnow)
+    disruption_end_time = Column(DateTime) # Payout happens after this
     expected_earnings = Column(Float)
     actual_earnings = Column(Float)
     missed_opportunity = Column(Float)
     payout_amount = Column(Float)
-    status = Column(String, default="Pending") # Pending, Approved, Flagged
+    status = Column(String, default="Processing") # Processing, Paid, Flagged
     fraud_reason = Column(String, nullable=True)
     
     user = relationship("User", back_populates="claims")

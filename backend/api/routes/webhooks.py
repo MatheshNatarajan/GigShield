@@ -1,14 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.orm import Session
-from datetime import datetime
-
-from models.schemas import DisruptionTrigger
-from models.db import Disruption, Policy, Claim, Zone, SessionLocal
-from core.logic.fraud_detection import fraud_detector
-from core.logic.payout_calc import payout_calculator
-from services.mock_delivery import mock_delivery_api
+from datetime import datetime, timedelta
+from models.db import Policy, User, Claim, SessionLocal
+from pydantic import BaseModel
+import time
 
 router = APIRouter()
+
+class SimulationTrigger(BaseModel):
+    user_id: int
+    trigger_type: str # Heavy Rain, Extreme Heat, Pollution, Order Drop, Flood Alert
+    value: float = 0
 
 def get_db():
     db = SessionLocal()
@@ -17,73 +19,92 @@ def get_db():
     finally:
         db.close()
 
-def process_disruption_payouts(db: Session, disruption: Disruption):
-    """
-    Background Task: Emulates the real-time trigger payout workflow.
-    """
-    # 1. Fetch all active policies for the affected Zone
-    affected_policies = db.query(Policy).filter(
-        Policy.zone_id == disruption.zone_id,
+def process_payout(claim_id: int):
+    # Simulate waiting for the disruption period to end
+    # In a real scenario, this would be 40 mins. For demo, we might want it shorter or just static.
+    # We will code it as 40 mins but the status check in UI will show 'Processing'.
+    db = SessionLocal()
+    try:
+        time.sleep(10) # Demo delay: 10 seconds (instead of 40 mins for instant gratification)
+        claim = db.query(Claim).filter(Claim.id == claim_id).first()
+        if claim:
+            claim.status = "Paid"
+            db.commit()
+    finally:
+        db.close()
+
+@router.post("/simulate-trigger")
+def simulate_trigger(trigger: SimulationTrigger, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+    # 1. Fetch User & Active Policy
+    user = db.query(User).filter(User.id == trigger.user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    active_policy = db.query(Policy).filter(
+        Policy.user_id == user.id,
         Policy.active_status == True
-    ).all()
+    ).first()
     
-    # Validation step -> fetch actual zone stats
-    zone_activity_drop = mock_delivery_api.get_zone_activity_drop(disruption.zone_id)
-    
-    for pk in affected_policies:
-        u_id = pk.user_id
-        
-        # 2. Estimate / Fetch User Earnings
-        expected = mock_delivery_api.get_historical_expected_earnings(u_id, 3, 'evening')
-        actual = mock_delivery_api.get_actual_earnings(u_id, disruption.start_time, disruption.end_time)
-        is_active = mock_delivery_api.is_user_active(u_id, disruption.start_time, disruption.end_time)
-        
-        missed, payout = payout_calculator.calculate_missed_opportunity(expected, actual)
-        
-        if payout <= 0:
-            continue # No loss recorded
-            
-        # 3. Fraud Detection Applied
-        is_fraud, fraud_reason = fraud_detector.evaluate_claim(db, u_id, 0, disruption.zone_id, zone_activity_drop, is_active)
-        
-        status = "Flagged" if is_fraud else "Approved"
-        
-        # 4. Create Claim & Trigger Payout (Mock Wallet)
-        claim = Claim(
-            user_id=u_id,
-            policy_id=pk.id,
-            disruption_id=disruption.id,
-            expected_earnings=expected,
-            actual_earnings=actual,
-            missed_opportunity=missed,
-            payout_amount=payout if not is_fraud else 0.0,
-            status=status,
-            fraud_reason=fraud_reason if is_fraud else None
-        )
-        db.add(claim)
-    
-    db.commit()
+    if not active_policy:
+        raise HTTPException(status_code=400, detail="No active policy found for this user")
 
+    # 2. Duplicate Check: Only once per user per trigger type in the current policy period
+    existing_claim = db.query(Claim).filter(
+        Claim.user_id == user.id,
+        Claim.policy_id == active_policy.id,
+        Claim.trigger_type == trigger.trigger_type
+    ).first()
+    
+    if existing_claim:
+        return {"status": "Already Triggered", "message": f"Policy coverage for {trigger.trigger_type} already utilized for this period."}
 
-@router.post("/disruption")
-def trigger_disruption(trigger: DisruptionTrigger, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
-    """
-    Webhook exposed for OpenWeather / AQI Alerts.
-    e.g. Receive Rainfall > 100mm Alert
-    """
-    # Create the Disruption Event
-    disruption = Disruption(
-        zone_id=trigger.zone_id,
-        type=trigger.type,
-        severity=trigger.severity,
-        threshold_value=trigger.threshold_value,
-        start_time=datetime.utcnow()
+    # 3. Trigger Logic
+    condition_met = False
+    if trigger.trigger_type == "Heavy Rain":
+        if trigger.value > 100: condition_met = True
+    elif trigger.trigger_type == "Extreme Heat":
+        if trigger.value > 42: condition_met = True
+    elif trigger.trigger_type == "Pollution":
+        if trigger.value > 350: condition_met = True
+    elif trigger.trigger_type == "Order Drop":
+        if trigger.value < 10: condition_met = True
+    elif trigger.trigger_type == "Flood Alert":
+        if trigger.value == 1: condition_met = True
+    
+    if not condition_met:
+        return {"status": "Condition not met", "message": f"{trigger.trigger_type} condition not met with value {trigger.value}"}
+
+    # 4. Calculate Payout & Schedule
+    payout_amount = user.weekly_income * 0.3
+    disruption_period = 40 # minutes
+    end_time = datetime.utcnow() + timedelta(minutes=disruption_period)
+
+    # 5. Create Claim (Status: Processing)
+    new_claim = Claim(
+        user_id=user.id,
+        policy_id=active_policy.id,
+        trigger_type=trigger.trigger_type,
+        payout_amount=payout_amount,
+        disruption_end_time=end_time,
+        status="Processing",
+        expected_earnings=user.weekly_income,
+        actual_earnings=user.weekly_income * 0.7, 
+        missed_opportunity=payout_amount
     )
-    db.add(disruption)
+    db.add(new_claim)
     db.commit()
-    db.refresh(disruption)
+    db.refresh(new_claim)
     
-    # Process Parametric Payments in background
-    background_tasks.add_task(process_disruption_payouts, db, disruption)
-    
-    return {"message": "Disruption recorded, parametric policy evaluation triggered.", "disruption_id": disruption.id}
+    # Schedule payout update (Background)
+    background_tasks.add_task(process_payout, new_claim.id)
+
+    return {
+        "status": "Success",
+        "trigger": trigger.trigger_type,
+        "payout_amount": payout_amount,
+        "message": f"⚠ {trigger.trigger_type} Detected! Claim processing for the next {disruption_period} mins. ₹{payout_amount} Payout Held."
+    }
+
+@router.get("/claims/{user_id}")
+def get_user_claims(user_id: int, db: Session = Depends(get_db)):
+    return db.query(Claim).filter(Claim.user_id == user_id).all()

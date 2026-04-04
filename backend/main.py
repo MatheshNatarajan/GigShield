@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from api.routes import users, policies, webhooks, analytics
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(title="GigShield AI API", version="1.0.0", description="Parametric Insurance MVP for Gig Workers")
+app = FastAPI(title="Kavach AI API", version="1.0.0", description="Parametric Insurance MVP for Gig Workers")
 
 # Add CORS middleware for the React frontend
 app.add_middleware(
@@ -20,4 +20,4 @@ app.include_router(analytics.router, prefix="/admin", tags=["Analytics"])
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to GigShield AI MVP"}
+    return {"message": "Welcome to Kavach AI MVP"}

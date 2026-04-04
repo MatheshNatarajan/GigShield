@@ -5,9 +5,10 @@ from datetime import datetime
 # USER SCHEMAS
 class UserBase(BaseModel):
     name: str
+    phone: str
+    city: str
     gig_platform: str
-    base_location_lat: float
-    base_location_lon: float
+    weekly_income: Optional[float] = 7000.0
 
 class UserCreate(UserBase):
     pass
@@ -20,11 +21,21 @@ class UserResponse(UserBase):
     class Config:
         from_attributes = True
 
+# PREMIUM SCHEMAS
+class PremiumCalculationRequest(BaseModel):
+    city: str
+    weekly_income: float
+
+class PremiumCalculationResponse(BaseModel):
+    premium: float
+    coverage: float
+    risk_level: str
+
 # POLICY SCHEMAS
 class PolicyBase(BaseModel):
     user_id: int
-    zone_id: int
     weekly_premium: float
+    coverage_amount: float
 
 class PolicyCreate(PolicyBase):
     pass

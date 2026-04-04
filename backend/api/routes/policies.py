@@ -1,10 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
-
-from models.schemas import PolicyCreate, PolicyResponse
-from models.db import Policy, User, Zone, SessionLocal
-from core.ai.risk_profiling import risk_model
+from models.schemas import PolicyCreate, PolicyResponse, PremiumCalculationRequest, PremiumCalculationResponse
+from models.db import Policy, User, SessionLocal
 
 router = APIRouter()
 
@@ -15,47 +13,47 @@ def get_db():
     finally:
         db.close()
 
-@router.get("/quote/{user_id}/{zone_id}")
-def get_premium_quote(user_id: int, zone_id: int, db: Session = Depends(get_db)):
-    """ Calls AI to evaluate real-time Risk Score and Premium """
-    user = db.query(User).filter(User.id == user_id).first()
-    zone = db.query(Zone).filter(Zone.id == zone_id).first()
-    
-    if not user or not zone:
-        raise HTTPException(status_code=404, detail="User or Zone not found")
-        
-    # In a real scenario, fetch real-time upcoming weather/AQI for the Zone
-    # For MVP, simulate a random upcoming weather severity metric (0-100) and AQI (50-450)
-    simulated_weather_metric = 45.0
-    simulated_aqi = 210
-    
-    premium = risk_model.calculate_weekly_premium(
-        user_id, 
-        user.base_location_lat, 
-        user.base_location_lon, 
-        simulated_weather_metric, 
-        simulated_aqi
-    )
+def get_risk_multiplier(city: str):
+    city = city.lower()
+    if "chennai" in city:
+        return 1.5, "High"
+    elif "bangalore" in city:
+        return 1.2, "Medium"
+    elif "coimbatore" in city:
+        return 1.0, "Low"
+    else:
+        return 1.0, "Low"
+
+@router.post("/calculate-premium", response_model=PremiumCalculationResponse)
+def calculate_premium(request: PremiumCalculationRequest):
+    multiplier, risk_level = get_risk_multiplier(request.city)
+    base_premium = request.weekly_income * 0.01
+    final_premium = base_premium * multiplier
+    coverage = request.weekly_income * 0.3
     
     return {
-        "zone_id": zone_id,
-        "base_risk": simulated_weather_metric,
-        "estimated_weekly_premium": premium
+        "premium": round(final_premium, 2),
+        "coverage": round(coverage, 2),
+        "risk_level": risk_level
     }
 
 @router.post("/subscribe", response_model=PolicyResponse)
 def subscribe_to_policy(policy_data: PolicyCreate, db: Session = Depends(get_db)):
-    # Verify User & Zone
+    # Verify User
     user = db.query(User).filter(User.id == policy_data.user_id).first()
-    if not user: raise HTTPException(404, "User not found")
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
     
+    # Deactivate existing active policies for this user
+    db.query(Policy).filter(Policy.user_id == user.id, Policy.active_status == True).update({"active_status": False})
+
     # Register Policy (1 week duration)
     new_policy = Policy(
         user_id=policy_data.user_id,
-        zone_id=policy_data.zone_id,
         start_date=datetime.utcnow(),
         end_date=datetime.utcnow() + timedelta(days=7),
         weekly_premium=policy_data.weekly_premium,
+        coverage_amount=policy_data.coverage_amount,
         active_status=True
     )
     
