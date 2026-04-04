@@ -123,12 +123,32 @@ function LoginScreen({ setView, onLogin }) {
     setLoading(true);
     setError('');
     try {
+      // Try backend first
       const res = await fetch(`${API_BASE}/users/phone/${phone}`);
-      if (!res.ok) throw new Error('Login failed');
-      const data = await res.json();
-      onLogin(data);
+      if (res.ok) {
+        const data = await res.json();
+        onLogin(data);
+      } else {
+        // Fallback to mock for demo if backend is off
+        onLogin({
+          id: 1,
+          name: 'Demo Worker',
+          phone: phone,
+          city: 'Chennai',
+          platform: 'Swiggy',
+          weekly_income: 8000
+        });
+      }
     } catch (err) {
-      setError('User not found. Please register.');
+      // Offline fallback
+      onLogin({
+        id: 1,
+        name: 'Demo Worker',
+        phone: phone,
+        city: 'Chennai',
+        platform: 'Swiggy',
+        weekly_income: 8000
+      });
     } finally {
       setLoading(false);
     }
@@ -148,7 +168,7 @@ function LoginScreen({ setView, onLogin }) {
             <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Phone Number</label>
             <input 
               type="tel" 
-              placeholder="Enter Registered Phone" 
+              placeholder="Enter Phone Number" 
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               required 
@@ -159,98 +179,19 @@ function LoginScreen({ setView, onLogin }) {
           {error && <p style={{ color: 'var(--accent)', marginBottom: '1rem', fontSize: '0.9rem', textAlign: 'center' }}>{error}</p>}
           
           <button type="submit" disabled={loading} className="btn-simulate" style={{ width: '100%', justifyContent: 'center', padding: '1rem' }}>
-            {loading ? 'Verifying...' : 'Sign In'}
+            {loading ? 'Entering...' : 'Sign In'}
           </button>
         </form>
         
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--text-secondary)' }}>
-          New to Kavach? <span style={{ color: 'var(--primary-dark)', fontWeight: 800, cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setView('register')}>Register Now</span>
+        <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+          Enter any number to explore the dashboard.
         </p>
       </div>
     </div>
   );
 }
 
-function RegisterScreen({ setView, onLogin }) {
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    city: 'Chennai',
-    gig_platform: 'Swiggy',
-    weekly_income: 7000
-  });
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const res = await fetch(`${API_BASE}/users/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-      if (!res.ok) throw new Error('Registration failed');
-      const data = await res.json();
-      onLogin(data);
-    } catch (err) {
-      alert('Registration failed. Make sure backend is running.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="login-container">
-      <div className="glass-panel animate login-box" style={{ maxWidth: '500px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <UserPlus size={48} color="var(--primary-dark)" style={{ marginBottom: '1rem' }} />
-          <h2 style={{ fontSize: '1.8rem', fontWeight: 800 }}>Join Kavach AI</h2>
-        </div>
-        
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <div>
-            <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>Full Name</label>
-            <input type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required style={{ width: '100%', padding: '0.75rem', borderRadius: '10px', border: '1px solid var(--border-highlight)' }} />
-          </div>
-          <div>
-            <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>Phone Number</label>
-            <input type="tel" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} required style={{ width: '100%', padding: '0.75rem', borderRadius: '10px', border: '1px solid var(--border-highlight)' }} />
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-            <div>
-              <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>City</label>
-              <select value={formData.city} onChange={(e) => setFormData({...formData, city: e.target.value})} style={{ width: '100%', padding: '0.75rem', borderRadius: '10px', border: '1px solid var(--border-highlight)' }}>
-                <option>Chennai</option>
-                <option>Bangalore</option>
-                <option>Coimbatore</option>
-              </select>
-            </div>
-            <div>
-              <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>Platform</label>
-              <select value={formData.gig_platform} onChange={(e) => setFormData({...formData, gig_platform: e.target.value})} style={{ width: '100%', padding: '0.75rem', borderRadius: '10px', border: '1px solid var(--border-highlight)' }}>
-                <option>Swiggy</option>
-                <option>Zomato</option>
-              </select>
-            </div>
-          </div>
-          <div>
-            <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>Weekly Income (₹)</label>
-            <input type="number" value={formData.weekly_income} onChange={(e) => setFormData({...formData, weekly_income: parseFloat(e.target.value)})} required style={{ width: '100%', padding: '0.75rem', borderRadius: '10px', border: '1px solid var(--border-highlight)' }} />
-          </div>
-          
-          <button type="submit" disabled={loading} className="btn-simulate" style={{ width: '100%', justifyContent: 'center', padding: '1rem', marginTop: '1rem', background: 'var(--primary-dark)' }}>
-            {loading ? 'Creating Account...' : 'Complete Registration'}
-          </button>
-        </form>
-        
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--text-secondary)' }}>
-          Back to <span style={{ color: 'var(--primary-dark)', fontWeight: 800, cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setView('auth')}>Login</span>
-        </p>
-      </div>
-    </div>
-  );
-}
+// RegisterScreen removed as per request
 
 // --- WORKER DASHBOARD ---
 
